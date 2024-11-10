@@ -8,9 +8,12 @@ export default class View {
       return this.renderError();
 
     this._data = data;
-    const markup = this._generateMarkup();
-    this._clear();
-    this._parentElement.insertAdjacentHTML("afterbegin", markup);
+    this._insertMarkup(this._generateMarkup());
+  }
+
+  _insertMarkup(markup) {
+    this._parentElement.innerHTML = "";
+    this._parentElement.insertAdjacentHTML("beforeend", markup);
   }
 
   _clear() {
@@ -25,8 +28,7 @@ export default class View {
         </svg>
       </div>
     `;
-    this._clear();
-    this._parentElement.insertAdjacentHTML("beforeend", markup);
+    this._insertMarkup(markup);
   }
 
   renderMessage(message = this._message) {
@@ -40,8 +42,7 @@ export default class View {
         <p>${message}</p>
     </div>
           `;
-    this._clear();
-    this._parentElement.insertAdjacentHTML("beforeend", markup);
+    this._insertMarkup(markup);
   }
 
   renderError(message = this._errorMessage) {
@@ -55,7 +56,6 @@ export default class View {
          <p>${message}</p>
     </div>
           `;
-    this._clear();
-    this._parentElement.insertAdjacentHTML("beforeend", markup);
+    this._insertMarkup(markup);
   }
 }
