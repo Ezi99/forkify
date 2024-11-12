@@ -5,6 +5,7 @@ import "regenerator-runtime/runtime";
 import searchView from "./views/searchView.js";
 import resultsView from "./views/resultsView.js";
 import paginationView from "./views/paginationView.js";
+import bookmarksView from "./views/bookmarksView.js";
 
 // https://forkify-api.herokuapp.com/v2
 
@@ -22,6 +23,7 @@ const controlRecipes = async function () {
   try {
     recipeView.renderSpinner();
     resultsView.update(model.getRecipesForPage());
+    bookmarksView.update(model.state.bookmarks);
     await model.loadRecipe(id);
     recipeView.render(model.state.recipe);
   } catch (error) {
@@ -55,9 +57,21 @@ const controlServings = function (servingsNum) {
   recipeView.update(model.state.recipe);
 };
 
+const controlAddBookmarks = function () {
+  if (!model.state.recipe.bookmarked) {
+    model.addBookark(model.state.recipe);
+  } else {
+    model.deleteBookmark(model.state.recipe.id);
+  }
+
+  recipeView.update(model.state.recipe);
+  bookmarksView.render(model.state.bookmarks);
+};
+
 const init = function () {
   recipeView.addHandlerRender(controlRecipes);
   recipeView.addHandlerUpdateServings(controlServings);
+  recipeView.addHandlerAddBookmark(controlAddBookmarks);
   searchView.addHandlerRender(controlSearchResults);
   paginationView.addHandlerRender(controlPagination);
 };

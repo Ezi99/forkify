@@ -3,12 +3,16 @@ import icons from "url:../../img/icons.svg";
 export default class View {
   _data;
 
-  render(data) {
+  render(data, render = true) {
     if (!data || (Array.isArray(data) && data.length === 0))
       return this.renderError();
 
     this._data = data;
-    this._insertMarkup(this._generateMarkup());
+    const markup = this._generateMarkup();
+
+    if (!render) return markup;
+
+    this._insertMarkup(markup);
   }
 
   update(data) {
@@ -30,7 +34,6 @@ export default class View {
       }
 
       if (!newEl.isEqualNode(currEl)) {
-        console.log(newEl);
         Array.from(newEl.attributes).forEach((attr) =>
           currEl.setAttribute(attr.name, attr.value)
         );
